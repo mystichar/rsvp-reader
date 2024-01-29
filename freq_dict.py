@@ -1,3 +1,4 @@
+#./freq_dict.py
 from settings import FREQUENCY_DELAY
 from os.path import dirname, join
 

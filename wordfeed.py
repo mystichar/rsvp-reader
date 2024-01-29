@@ -1,3 +1,4 @@
+#./Wordfeed.py
 from settings import STOPS, WPM
 from freq_dict import FREQ_DICT
 
@@ -7,7 +8,8 @@ class WordFeed(object):
     def __init__(self, text, inext=0):
         self.text_tuple = tuple(text.split())
         self.inext = inext if inext <= len(self.text_tuple) else 0
-        self.wpm_delay_ms = 60000 / WPM
+        base_delay_ms = 60000 / WPM
+        self.wpm_delay_ms = base_delay_ms / (WPM/300)
         self.delay_tuple = None
         self.preprocess_delays()
 
@@ -19,8 +21,11 @@ class WordFeed(object):
         self.delay_tuple = tuple(delays)
 
     def calculate_delay_ms(self, text):
+        print(f"calculate_delay_ms: {text}")
         stop_delay = STOPS.get(text[-1], 0) * self.wpm_delay_ms
         freq_delay = FREQ_DICT.get_delay_words(text) * self.wpm_delay_ms
+        print(f"stop_delay: {stop_delay}, freq_delay: {freq_delay}")
+        print(f"stop_delay + freq_delay + self.wpm_delay_ms: {stop_delay + freq_delay + self.wpm_delay_ms}")
         return self.wpm_delay_ms + stop_delay + freq_delay
 
     def get_statistics(self):

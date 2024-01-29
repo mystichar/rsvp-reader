@@ -1,7 +1,8 @@
+#./settings.py
 import math
 
 # How many words per minute.
-WPM = 300
+WPM = 500
 
 # Font to display RSVP text
 RSVP_FONT_DICT = {
