@@ -1,9 +1,8 @@
-import Tkinter as tki
-from tkFont import Font
+import tkinter as tki
+from tkinter.font import Font
 from wordfeed import WordFeed
 from settings import RSVP_FONT_DICT, RSVP_SHAPE
 from sys import platform
-
 
 master = tki.Tk()
 
@@ -12,7 +11,7 @@ class Gui(object):
     def __init__(self):
         self.master = master
         self._pause_flag = True
-        #
+        # ...
         self.input_frame = InputFrame(self.master, self)
         self.input_frame.pack(side=tki.TOP)
         self.rsvp_frame = RsvpFrame(self.master, self)
@@ -22,13 +21,13 @@ class Gui(object):
         self.rate_string = rs = tki.StringVar()
         self.rate_label = tki.Label(self.master, textvariable=rs)
         self.rate_label.pack(side=tki.TOP)
-        #
+        # ...
         self.master.bind('<Escape>', lambda e: self.master.destroy())
         self.master.resizable(False, False)
-        #
+        # ...
         self.wordfeed = None
         self.update_wordfeed()
-        #
+        # ...
         self.apply_settings()
 
     def apply_settings(self):
@@ -75,20 +74,20 @@ class Gui(object):
 
     def pause(self, event=None):
         self._pause_flag = True
-        print 'pause'
+        print('pause')
 
     def resume(self, event=None):
         self._pause_flag = False
-        print 'resume'
+        print('resume')
         self.rsvp_kernel()
 
     def back10(self, event=None):
-        print 'back 10'
+        print('back 10')
         self.wordfeed.inext -= 10
         self.update_rsvp()
 
     def back50(self, event=None):
-        print 'back 50'
+        print('back 50')
         self.wordfeed.inext -= 50
         self.update_rsvp()
 
@@ -98,7 +97,7 @@ class InputFrame(tki.Frame):
         tki.Frame.__init__(self, master)
         self.gui = gui
         self.inputvar = tki.StringVar(value='Enter text here...')
-        self.inputvar.trace('w', self.gui.update_wordfeed)
+        self.inputvar.trace('w', lambda name, index, mode: self.gui.update_wordfeed())
         self.entry = tki.Entry(self, textvariable=self.inputvar, width=50)
         self.entry.pack()
         sel_all_cmd = '<Command-a>' if platform == 'darwin' else '<Control-a>'

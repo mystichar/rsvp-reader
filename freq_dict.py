@@ -1,23 +1,21 @@
 from settings import FREQUENCY_DELAY
 from os.path import dirname, join
 
-# This class loads a 'dictionary' of frequently used words and their frequency
-# and returns the corresponding delay length (in milliseconds) upon request
 class FrequencyDict(object):
     def __init__(self, csv_path):
         self.fd = {}
-        with open(csv_path) as csv_file:
+        with open(csv_path, encoding='utf-8') as csv_file:  # Added UTF-8 encoding for compatibility
             rank = 0
             for line in csv_file:
                 if '\t' not in line:
                     continue
                 rank += 1
-                split = line.split('\t')
+                split = line.strip().split('\t')  # Strip newline characters
                 word = split[0]
                 freq = int(split[1])
                 self.fd[word] = (freq, rank)
-        self.min_freq = min(self.fd.itervalues())
-        self.max_freq = max(self.fd.itervalues())
+        self.min_freq = min(self.fd.values(), default=(0,0))  # Changed from itervalues() and added default
+        self.max_freq = max(self.fd.values(), default=(0,0))  # Added default value
 
     def get_delay_words(self, text):
         freq, rank = self.fd.get(text, (0, len(self.fd)))
